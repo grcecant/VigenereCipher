@@ -3,22 +3,42 @@ import sys
 
 alphabet = list(string.ascii_uppercase)
 
-def process_key():
-    global key
-    key = []
+def process_inputs():
+    if len(sys.argv) < 3:
+        sys.exit()
 
-    for i in range(0,26):
-        temp_list = []
-        for j in range(i, i+26):
-            temp_list.append(alphabet[j%26])
-        key.append(temp_list)
+    #args from command line
+    global encode, text, key
+    mode = sys.argv[1]
+    if mode == 'encode':
+        encode = True
+    else:
+        encode = False
+    text = sys.argv[2].upper()
+    key = sys.argv[3]
+
+    #print the ciphertext and the key
+    print("\nThe ciphertext is: " + text)
+    print("The key is: " + key)
 
 def encode_plaintext_letter(input, key_letter):
     #math to do: add then mod if u need to
     column = key_letter.index(alphabet)
     row = input.index(alphabet)
 
-def find_repeating_groups(cipher):
+def vigenere_cipher(text, key, encode):
+    broken_up = []
+    key_length = len(key)
+    for i in range(key_length):
+        broken_up.append(text[i::key_length])
+    print(broken_up)
+
+if __name__ == '__main__':
+    process_inputs()
+    vigenere_cipher(text, key, encode)
+
+
+'''def find_repeating_groups(cipher):
     repetitive_trios = []
     for i in range(0, len(cipher) - 3):
         instances = 0
@@ -46,11 +66,4 @@ def find_length(groups):
                 else:
                     next = cipher[i]
             if not first_instance:
-                instances.append(next - first)
-
-
-
-if __name__ == '__main__':
-    #encode_plaintext_letter('a')
-    repetition = find_repeating_groups(ciphertext)
-    find_length(repetition)
+                instances.append(next - first)'''
