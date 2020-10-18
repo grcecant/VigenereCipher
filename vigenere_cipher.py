@@ -2,7 +2,11 @@ import string
 import sys
 
 alphabet = list(string.ascii_uppercase)
+alphabet_freq = {
+    'a': 0.08167, 'b': 0.014920, 'c': 0.02782, 'd': 0.04253, 'e':0.12702, 'f':0.02228, 'g':0.02015, 'h':0.06094, 'i':0.06966, 'j':0.00153, 'k':0.00772, 'l':0.04025, 'm':0.02406, 'n':0.06749, 'o':0.07507, 'p':0.01929, 'q':0.00095, 'r':0.05987, 's':0.06327, 't':0.09056, 'u':0.02758, 'v':0.00978, 'w':0.02360, 'x':0.00150, 'y':0.01974, 'z':0.00074
+}
 
+#process command line arguments
 def process_inputs():
     if len(sys.argv) < 3:
         sys.exit()
@@ -15,55 +19,38 @@ def process_inputs():
     else:
         encode = False
     text = sys.argv[2].upper()
-    key = sys.argv[3]
+    key = sys.argv[3].upper()
 
     #print the ciphertext and the key
-    print("\nThe ciphertext is: " + text)
-    print("The key is: " + key)
+    print("\nThe key is: " + key)
 
-def encode_plaintext_letter(input, key_letter):
-    #math to do: add then mod if u need to
-    column = key_letter.index(alphabet)
-    row = input.index(alphabet)
-
-def vigenere_cipher(text, key, encode):
+#function to break up text for frequency analysis
+def break_up_text(text, key):
     broken_up = []
     key_length = len(key)
     for i in range(key_length):
-        broken_up.append(text[i::key_length])
-    print(broken_up)
+        substring = key[i::key_length]
+        broken_up.append(substring)
+    return broken_up
+
+#encode/decode functino
+def vigenere_cipher(text, key, encode):
+    count = 0
+    key_length = len(key)
+    cipher_text = ''
+
+    for char in text:
+        current_index = alphabet.index(char)
+        current_shift = alphabet.index(key[count % key_length])
+        if encode:
+            new_char = alphabet[(current_index + current_shift) % 26]
+        else:
+            new_char = alphabet[(current_index - current_shift) % 26]
+        cipher_text+=new_char
+        count+=1
+
+    print("\nYour ciphertext is: \"" + cipher_text + "\"\n")
 
 if __name__ == '__main__':
     process_inputs()
     vigenere_cipher(text, key, encode)
-
-
-'''def find_repeating_groups(cipher):
-    repetitive_trios = []
-    for i in range(0, len(cipher) - 3):
-        instances = 0
-        current_trio = cipher[i] + cipher[i+1] + cipher[i+2] + cipher[i+3]
-        for i in range(i, len(cipher) - 3):
-            check_trio = cipher[i] + cipher[i+1] + cipher[i+2] + cipher[i+3]
-            if current_trio == check_trio:
-                instances+=1
-        if instances > 2 and (current_trio not in repetitive_trios):
-            repetitive_trios.append(current_trio)
-    return repetitive_trios
-
-def find_length(groups):
-    for current in groups:
-        first_instance = True
-        first = 0
-        instances = []
-        for i in range(i, len(cipher) - 3):
-            next = 0
-            check = cipher[i] + cipher[i+1] + cipher[i+2] + cipher[i+3]
-            if current == check:
-                if first_instance:
-                    first = cipher[i]
-                    first_instance= False
-                else:
-                    next = cipher[i]
-            if not first_instance:
-                instances.append(next - first)'''
