@@ -21,9 +21,6 @@ def process_inputs():
     text = sys.argv[2].upper()
     key = sys.argv[3].upper()
 
-    #print the ciphertext and the key
-    print("\nThe key is: " + key)
-
 #function to break up text for frequency analysis
 def break_up_text(text, key):
     broken_up = []
@@ -49,7 +46,7 @@ def vigenere_cipher(text, key, encode):
         cipher_text+=new_char
         count+=1
 
-    print("\nYour ciphertext is: \"" + cipher_text + "\"\n")
+    print(cipher_text)
 
 if __name__ == '__main__':
     process_inputs()
